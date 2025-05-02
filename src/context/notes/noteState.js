@@ -2,117 +2,98 @@ import React, { useState } from "react";
 import noteContext from "./noteContext";
 
 const NoteState = (props) => {
-    const notesInitial = [
-        {
-          "_id": "68062193d6287c3cde2be716",
-          "user": "68053b4ebf720836fffad214",
-          "title": "Reading",
-          "description": "Please start the reading exam id not far",
-          "tag": "personal",
-          "date": "2025-04-21T10:44:35.580Z",
-          "__v": 0
+  const host = "http://localhost:5000";
+  const notesInitial = [];
+  const [notes, setNotes] = useState(notesInitial);
+
+    // get all note
+    const getNotes = async () => {
+      // Api call
+        const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token":
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjgwNTNiNGViZjcyMDgzNmZmZmFkMjE0In0sImlhdCI6MTc0NTE3NDA5Mn0.7CRVuGA2uRvgs1AZUoBpvqWLAq0STYNbudoWThDI380",
+          },
+        });
+        const json = await response.json();
+        console.log(json);
+        setNotes(json);
+    };
+
+  // Add a note
+  const addNote = async (title, description, tag) => {
+    // TODO: API call
+    // Api call
+    try {
+      const response = await fetch(`${host}/api/notes/addnote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjgwNTNiNGViZjcyMDgzNmZmZmFkMjE0In0sImlhdCI6MTc0NTE3NDA5Mn0.7CRVuGA2uRvgs1AZUoBpvqWLAq0STYNbudoWThDI380",
         },
-        {
-          "_id": "6807afaabd42d7d2d23e911e",
-          "user": "68053b4ebf720836fffad214",
-          "title": "Minecraft",
-          "description": "Play minecraft and do graind diamond and netherite ingot",
-          "tag": "genral youtube perpos",
-          "date": "2025-04-22T15:03:06.573Z",
-          "__v": 0
-        },
-        {
-          "_id": "6807afacbd42d7d2d23e9120",
-          "user": "68053b4ebf720836fffad214",
-          "title": "Minecraft",
-          "description": "Play minecraft and do graind diamond and netherite ingot",
-          "tag": "genral youtube perpos",
-          "date": "2025-04-22T15:03:08.395Z",
-          "__v": 0
-        },
-        {
-          "_id": "6807afacbd42d7d2d23e9122",
-          "user": "68053b4ebf720836fffad214",
-          "title": "Speak in english",
-          "description": "You cannot speak english so you prectice for speak english otherwise you speak Gujrati",
-          "tag": "read in PDF sand by sarth",
-          "date": "2025-04-22T15:03:08.625Z",
-          "__v": 0
-        },
-        {
-          "_id": "6807afafbd42d7d2d23e9124",
-          "user": "68053b4ebf720836fffad214",
-          "title": "Minecraft",
-          "description": "Play minecraft and do graind diamond and netherite ingot",
-          "tag": "genral youtube perpos",
-          "date": "2025-04-22T15:03:11.332Z",
-          "__v": 0
-        },
-        {
-          "_id": "6807afb0bd42d7d2d23e9126",
-          "user": "68053b4ebf720836fffad214",
-          "title": "Minecraft",
-          "description": "Play minecraft and do graind diamond and netherite ingot",
-          "tag": "genral youtube perpos",
-          "date": "2025-04-22T15:03:12.015Z",
-          "__v": 0
-        },
-        {
-          "_id": "6807afb0bd42d7d2d23e9128",
-          "user": "68053b4ebf720836fffad214",
-          "title": "Write in english",
-          "description": "Practice english writing because now your collage exam and your interview taken in english and all company work in english",
-          "tag": "Suggestion by your HOD Dhaval Nimavat",
-          "date": "2025-04-22T15:03:12.618Z",
-          "__v": 0
-        },
-        {
-          "_id": "6807afb2bd42d7d2d23e912a",
-          "user": "68053b4ebf720836fffad214",
-          "title": "Minecraft",
-          "description": "Play minecraft and do graind diamond and netherite ingot",
-          "tag": "genral youtube perpos",
-          "date": "2025-04-22T15:03:14.081Z",
-          "__v": 0
-        }
-    ]
+        body: JSON.stringify({title, description, tag}),
+      });
+      const json = await response.json();
     
-    const [notes, setNotes] = useState(notesInitial);
-
-    // Add a note
-    const addNote = (title, description, tag) => {
-      // TODO: API call
-      console.log("Adding a new note");
-      const note = {
-        "_id": "6807afb2bd42d7d2d23e912a",
-        "user": "68053b4ebf720836fffad214",
-        "title": title,
-        "description": description,
-        "tag": tag,
-        "date": "2025-04-22T15:03:14.081Z",
-        "__v": 0
-      };
-      setNotes(notes.concat(note))
+    }catch (error) {
+      console.error("Fetch Error:", error);
     }
 
-    // Delete a note
-    const deleteNote = (id) => {
-      // TODO: API call
-      console.log("Deleting a note with id" + id);
-      const newNotes = notes.filter((note) => {return note._id !== id})
-      setNotes(newNotes)
+    console.log("Adding a new note");
+    const note = {
+      _id: "6807afb2bd42d7d2d23e912a",
+      user: "68053b4ebf720836fffad214",
+      title: title,
+      description: description,
+      tag: tag,
+      date: "2025-04-22T15:03:14.081Z",
+      __v: 0,
+    };
+    setNotes(notes.concat(note));
+  };
+
+  // Delete a note
+  const deleteNote = (id) => {
+    // TODO: API call
+    console.log("Deleting a note with id" + id);
+    const newNotes = notes.filter((note) => {
+      return note._id !== id;
+    });
+    setNotes(newNotes);
+  };
+
+  // Edit a note
+  const editNote = async (id, title, description, tag) => {
+    // Api call
+    const response = await fetch(`${host}/api/notes/updateNotes/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjgwNTNiNGViZjcyMDgzNmZmZmFkMjE0In0sImlhdCI6MTc0NTE3NDA5Mn0.7CRVuGA2uRvgs1AZUoBpvqWLAq0STYNbudoWThDI380",
+      },
+      body: JSON.stringify({title, description, tag}),
+    });
+    const json = response.json();
+
+    // logic to edit in client
+    for (let index = 0; index < notes.length; index++) {
+      const element = notes[index];
+      if (element._id === id) {
+        element.title = title;
+        element.description = description;
+        element.tag = tag;
+      }
     }
+  };
 
-    // Edit a note
-    const editNote = (id, title, description, tag) => {
-
-    }
-
-    return(
-        <noteContext.Provider value={{notes, addNote, deleteNote, editNote}}>
-            {props.children}
-        </noteContext.Provider>
-    )
-}
+  return (
+    <noteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes}}>
+      {props.children}
+    </noteContext.Provider>
+  );
+};
 
 export default NoteState;
